@@ -8,16 +8,25 @@
   var iconOpen = document.getElementById("menuIconOpen");
   var iconClose = document.getElementById("menuIconClose");
 
+  function setHidden(el, isHidden) {
+    if (isHidden) {
+      el.setAttribute("hidden", "");
+    } else {
+      el.removeAttribute("hidden");
+    }
+  }
+
   function setMenuOpen(isOpen) {
-    mobileNav.hidden = !isOpen;
+    setHidden(mobileNav, !isOpen);
     menuButton.setAttribute("aria-expanded", String(isOpen));
     menuButton.setAttribute("aria-label", isOpen ? "Fechar menu" : "Abrir menu");
-    iconOpen.hidden = isOpen;
-    iconClose.hidden = !isOpen;
+    setHidden(iconOpen, isOpen);
+    setHidden(iconClose, !isOpen);
+    document.body.classList.toggle("no-scroll", isOpen);
   }
 
   menuButton.addEventListener("click", function () {
-    setMenuOpen(mobileNav.hidden);
+    setMenuOpen(mobileNav.hasAttribute("hidden"));
   });
 
   mobileNav.querySelectorAll("a").forEach(function (link) {
@@ -27,7 +36,7 @@
   });
 
   document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape" && !mobileNav.hidden) {
+    if (event.key === "Escape" && !mobileNav.hasAttribute("hidden")) {
       setMenuOpen(false);
     }
   });
